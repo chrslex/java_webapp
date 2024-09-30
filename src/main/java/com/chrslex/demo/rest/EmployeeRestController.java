@@ -3,10 +3,7 @@ package com.chrslex.demo.rest;
 import com.chrslex.demo.entity.Employee;
 import com.chrslex.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,4 +32,34 @@ public class EmployeeRestController {
         return employee;
     }
 
+    // possible upsert
+    @PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee employee) {
+//        employee.setEmployeeId(0);
+
+        Employee savedEmployee = employeeService.save(employee);
+        return savedEmployee;
+    }
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        if(employee.getEmployeeId() == 0) {
+            System.out.println(employee);
+            throw new RuntimeException("No ID Detected");
+        }
+        Employee savedEmployee = employeeService.save(employee);
+
+        return savedEmployee;
+
+    }
+
+    @DeleteMapping("/employees/{employeeId}")
+    public String deleteEmployee(@PathVariable int employeeId) {
+        Employee toDelete = employeeService.findById(employeeId);
+        if(toDelete == null) {
+            throw new RuntimeException("Employee with id " + employeeId + " not found");
+        }
+        employeeService.deleteById(employeeId);
+        return "Deleted Employee with id " + employeeId;
+    }
 }
