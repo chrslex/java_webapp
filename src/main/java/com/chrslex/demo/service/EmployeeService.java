@@ -9,5 +9,6 @@ public interface EmployeeService {
     Employee findById(int id);
     Employee save(Employee employee);
     void deleteById(int id);
+    Employee findByFirstNameAndLastName(String fn, String ln);
 
 }

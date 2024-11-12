@@ -35,7 +35,6 @@ public class EmployeeRestController {
     // possible upsert
     @PostMapping("/employees")
     public Employee addEmployee(@RequestBody Employee employee) {
-//        employee.setEmployeeId(0);
 
         Employee savedEmployee = employeeService.save(employee);
         return savedEmployee;
@@ -61,5 +60,10 @@ public class EmployeeRestController {
         }
         employeeService.deleteById(employeeId);
         return "Deleted Employee with id " + employeeId;
+    }
+
+    @GetMapping("/employees/multiple_condition")
+    public Employee findByFirstNameAndLastName(@RequestParam("first_name") String fn, @RequestParam("last_name") String ln) {
+        return employeeService.findByFirstNameAndLastName(fn, ln);
     }
 }
